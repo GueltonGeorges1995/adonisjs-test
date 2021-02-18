@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .my-task{
+            display: flex
+        }
+        ul {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Tasks</h1>
+    <ul>
+        @each(task in tasks)
+            <div class="my-task">
+                <form action="{{`/tasks/${task.id}?_method=PATCH`}} " method="POST">
+                    {{ csrfField() }}
+                    <div>
+                        <input type="checkbox" name="completed" onchange="this.form.submit()" {{task.done ? "checked" : ""}}>
+                    </div>
+                </form>
+                <li><a href="{{`/tasks/${task.id}`}}" >{{task.title}}</a></li>
+                <form action="{{`/tasks/${task.id}?_method=DELETE`}}" method="POST">
+                    {{ csrfField() }}
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        @endeach
+    </ul>
+    <form action="/tasks" method="POST">
+        {{ csrfField() }}
+        <label >New Task</label>
+        <input type="text" name="title">
+        <button type="submit">Validate</button>
+        @if(flashMessages.has("errors.title"))
+            <h3>{{flashMessages.get('errors.title')}} </h3>
+        @endif
+    </form>
+</body>
+</html>
