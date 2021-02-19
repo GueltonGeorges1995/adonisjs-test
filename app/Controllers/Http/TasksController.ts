@@ -34,11 +34,16 @@ export default class TasksController {
         return response.redirect('back')
     }
 
-    public async update ({request, response, params}: HttpContextContract) {
+    public async updateComplete ({request, response, params}: HttpContextContract) {
         const task = await Task.findOrFail(params.id)
-        if (request.input('completed') ) {
-            task.done = !!request.input('completed')  
-        }
+        task.done = !!request.input('completed')          
+        await task.save()     
+        return response.redirect().back()
+    }
+
+    public async updateTitle ({request, response, params}: HttpContextContract) {
+        const task = await Task.findOrFail(params.id)
+        task.title = request.input('title')          
         await task.save()     
         return response.redirect().back()
     }
@@ -47,5 +52,7 @@ export default class TasksController {
         const task = await Task.findOrFail(params.id)
         await task.delete()
         return response.redirect().back()
-    }   
+    }
+    
+    
 }

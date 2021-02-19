@@ -19,7 +19,7 @@
     <ul>
         @each(task in tasks)
             <div class="my-task">
-                <form action="{{`/tasks/${task.id}?_method=PATCH`}} " method="POST">
+                <form action="{{`/tasks/${task.id}/complete?_method=PATCH`}} " method="POST">
                     {{ csrfField() }}
                     <div>
                         <input type="checkbox" name="completed" onchange="this.form.submit()" {{task.done ? "checked" : ""}}>

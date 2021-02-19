@@ -9,5 +9,14 @@
 <body>
     <h1>{{task.title}}</h1>
     <p>{{ task.done === 0 ? "Not done yet" : "Already done" }}</p>
+    <form action="{{`/tasks/${task.id}/title?_method=PATCH `}}" method="POST">
+        {{ csrfField() }}
+        <label for="">Change Task's title</label>
+        <input type="text" name="title" value="{{task.title}}" >
+        <button type="submit">Validate</button>
+    </form>
+    <div>
+        <a href="/">Go Back</a>
+    </div>
 </body>
 </html>
