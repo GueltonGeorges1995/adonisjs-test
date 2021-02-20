@@ -14,6 +14,9 @@
         <label for="">Change Task's title</label>
         <input type="text" name="title" value="{{task.title}}" >
         <button type="submit">Validate</button>
+        @if(flashMessages.has("errors.title"))
+            <h3>{{flashMessages.get('errors.title')}} </h3>
+        @endif
     </form>
     <div>
         <a href="/">Go Back</a>

@@ -2,6 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 import Task from "App/Models/Task";
 import { schema, rules} from "@ioc:Adonis/Core/Validator";
 
+
 export default class TasksController {
     public async index ({ view } : HttpContextContract) {
         const tasks = await Task.all();
@@ -10,7 +11,6 @@ export default class TasksController {
 
     public async show ({view, params} :HttpContextContract){
         const task = await Task.findOrFail(params.id)
-       
         return view.render('TasksPageShow', {task})
     }
 
@@ -43,8 +43,20 @@ export default class TasksController {
 
     public async updateTitle ({request, response, params}: HttpContextContract) {
         const task = await Task.findOrFail(params.id)
-        task.title = request.input('title')          
-        await task.save()     
+        const validationSchema = schema.create({
+            title: schema.string({trim: true},[
+                rules.maxLength(255)
+            ])
+        })
+        const validatedData = await request.validate({
+            schema: validationSchema,
+            messages: {
+                "title.required" : "Enter task title",
+                "title.maxLength": "Tasks title can not exceed 255 charactere"
+            }
+        })
+        task.title = validatedData.title
+        await task.save() 
         return response.redirect().back()
     }
 
